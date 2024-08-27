@@ -688,6 +688,8 @@ import axios from 'axios';
 import { Modal, Button } from 'react-bootstrap'; 
 import 'tailwindcss/tailwind.css';
 import AdminNav from '../Components/AdminNav';
+import Swal from 'sweetalert2';
+import { FaRupeeSign } from 'react-icons/fa';
 
 const AdminProductPage = () => {
     const [products, setProducts] = useState([]);
@@ -738,17 +740,55 @@ const AdminProductPage = () => {
         const { auctionStartTimeDate, endTimeDate } = newProduct;
         
         if (new Date(auctionStartTimeDate) < new Date(now)) {
-            alert('Auction start date cannot be in the past.');
+            // alert('Auction start date cannot be in the past.');
+            Swal.fire({
+                title: 'Warning',
+                text: 'Auction start date cannot be in the past. ',
+                icon: 'error',
+                customClass: {
+                    popup: 'w-80 h-auto p-4 rounded-lg', // Tailwind classes for sizing
+                    title: 'text-lg font-bold',
+                    content: 'text-sm',
+                    confirmButton: 'bg-red-500 text-white'
+                  },
+                position: 'top-end',
+                showConfirmButton: true,
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#3085d6', 
+                timer: 5000, 
+              });
             return false;
         }
 
         if (new Date(endTimeDate) < new Date(now)) {
-            alert('End date cannot be in the past.');
+            // alert('End date cannot be in the past.');
+            Swal.fire({
+                title: 'Warning',
+                text: 'End date cannot be in the past.',
+                icon: 'error',
+               
+                position: 'top-end',
+                showConfirmButton: true,
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#3085d6', 
+                timer: 5000, 
+              });
             return false;
         }
 
         if (new Date(endTimeDate) <= new Date(auctionStartTimeDate)) {
-            alert('End date should be after the auction start date.');
+            // alert('End date should be after the auction start date.');
+            Swal.fire({
+                title: 'Warning',
+                text: 'End date should be after the auction start date. ',
+                icon: 'error',
+               
+                position: 'top-end',
+                showConfirmButton: true,
+                confirmButtonText: 'OK',
+                confirmButtonColor: '#3085d6', 
+                timer: 5000, 
+              });
             return false;
         }
 
@@ -863,7 +903,7 @@ const AdminProductPage = () => {
                             <tr key={product.productId}>
                                 <td className="py-2 px-4 border-b">{product.productId}</td>
                                 <td className="py-2 px-4 border-b">{product.name}</td>
-                                <td className="py-2 px-4 border-b">${product.startingPrice}</td>
+                                <td className="py-2 px-4 border-b">{product.startingPrice}</td>
                                 <td className="py-2 px-4 border-b">{product.description}</td>
                                 <td className="py-2 px-4 border-b">{product.productstatus}</td>
                                 <td className="py-2 px-4 border-b">
@@ -1045,7 +1085,7 @@ const AdminProductPage = () => {
                                 />
                                 <h3 className="text-xl font-bold">{viewProduct.name}</h3>
                                 <p className="mb-2">{viewProduct.description}</p>
-                                <p className="text-green-500 text-lg mb-2">${viewProduct.startingPrice}</p>
+                                <p className="text-green-500 text-lg mb-2">RS :{viewProduct.startingPrice}</p>
                                 <p className="text-gray-500 mb-2">Status: {viewProduct.productstatus}</p>
                                 <p className="text-gray-500">Auction Start: {new Date(viewProduct.auctionStartTimeDate).toLocaleString()}</p>
                                 <p className="text-gray-500">End Time: {new Date(viewProduct.endTimeDate).toLocaleString()}</p>

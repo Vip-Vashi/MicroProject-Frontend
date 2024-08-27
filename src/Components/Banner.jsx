@@ -62,7 +62,7 @@ function VideoCarousel() {
   }, []);
 
   return (
-    <div id="video-carousel" className="relative w-full h-[85vh] mt-20" data-carousel="slide">
+    <div id="video-carousel" className="relative w-full h-[110vh] mt-20" data-carousel="slide">
       <div className="relative h-full overflow-hidden rounded-lg">
         <div className="hidden duration-1000 ease-in-out" data-carousel-item>
           <video 

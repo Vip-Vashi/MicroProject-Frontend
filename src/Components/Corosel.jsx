@@ -68,14 +68,15 @@ function VideoCarousel() {
       <div className="hidden duration-1000 ease-in-out" data-carousel-item>
           <video 
             ref={el => videoRefs.current[0] = el}
-            src="https://cdnl.iconscout.com/lottie/premium/preview-watermark/art-auction-animation-download-in-lottie-json-gif-static-svg-file-formats--piece-of-sells-painting-auctioneer-with-hammer-cryptocurrency-investment-pack-e-commerce-shopping-animations-7330027.mp4"
+            // src={vdo}
+            src="https://cdnl.iconscout.com/lottie/premium/preview-watermark/woman-bidding-for-nft-art-piece-animation-download-in-lottie-json-gif-static-svg-file-formats--crypto-digital-blockchain-business-variants-pack-miscellaneous-animations-7016693.mp4"
             className="absolute block w-full h-full object-cover"
             alt="Slide 2"
             // controls
           />
         </div>
 
-        <div className="hidden duration-1000 ease-in-out" data-carousel-item>
+        {/* <div className="hidden duration-1000 ease-in-out" data-carousel-item>
           <video 
             ref={el => videoRefs.current[1] = el}
             src="https://cdnl.iconscout.com/lottie/premium/preview-watermark/auction-animation-download-in-lottie-json-gif-static-svg-file-formats--business-bidding-asking-people-voting-price-loopy-pack-animations-6030537.mp4"
@@ -83,7 +84,7 @@ function VideoCarousel() {
             alt="Slide 1"
             // controls
           />
-        </div>
+        </div> */}
         <div className="hidden duration-1000 ease-in-out" data-carousel-item>
           <video 
             ref={el => videoRefs.current[2] = el}

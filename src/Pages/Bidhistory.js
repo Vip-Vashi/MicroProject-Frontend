@@ -1,21 +1,32 @@
 import React, { useEffect, useState } from 'react';
-
+import axios from 'axios';
 const BidHistory = () => {
     const [bids, setBids] = useState([]);
     const [userId, setUserId] = useState('');
-
+const [biddings,setBiddings]=useState([]);
     useEffect(() => {
-        // Get user ID from session storage
+     
         const storedUserId = sessionStorage.getItem('userid');
         setUserId(storedUserId);
-
-        // Retrieve stored bids from sessionStorage
+        axios.get('http://localhost:8000/biddings/all')
+        .then(response => {
+          const userBiddings = response.data.filter(bid => bid.bidder == storedUserId);
+          // const updatedWinnings = userWinnings.map(winning => ({
+          //   ...winning,
+          //   paid: JSON.parse(sessionStorage.getItem(`paymentStatus_${winning.product.productId}`)) || winning.paid || false
+          // }));
+          setBiddings(userBiddings);
+        })
+        .catch(error => console.error('Error fetching Biddings:', error));
+  
+        
         const storedBids = JSON.parse(sessionStorage.getItem('bids')) || [];
-        // Filter bids based on the current user ID
+       
         const userBids = storedBids.filter(bid => bid.userId === storedUserId);
         setBids(userBids);
         console.log("*******************")
         console.log(bids)
+        console.log(biddings)
     }, []);
     
     return (
@@ -31,7 +42,7 @@ const BidHistory = () => {
                             <th className="py-2 px-4 border-b bg-gray-100 text-left text-gray-600">Status</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    {/* <tbody>
                         {bids.length > 0 ? (
                             bids.map(bid => (
                                 <tr key={bid.productId}>
@@ -39,6 +50,22 @@ const BidHistory = () => {
                                     <td className="py-2 px-4 border-b text-gray-700">{bid.name}</td>
                                     <td className="py-2 px-4 border-b text-gray-700">${bid.currentBiddingPrice}</td>
                                     <td className="py-2 px-4 border-b text-gray-700">{bid.productstatus}</td>
+                                </tr>
+                            ))
+                        ) : (
+                            <tr>
+                                <td colSpan="4" className="py-2 px-4 text-center text-gray-500">No bids placed yet</td>
+                            </tr>
+                        )}
+                    </tbody> */}
+                    <tbody>
+                        {biddings.length > 0 ? (
+                            biddings.map(bid => (
+                                <tr key={bid.bidId}>
+                                    <td className="py-2 px-4 border-b text-gray-700">{bid.product.productId}</td>
+                                    <td className="py-2 px-4 border-b text-gray-700">{bid.product.name}</td>
+                                    <td className="py-2 px-4 border-b text-gray-700">${bid.biddingprice}</td>
+                                    <td className="py-2 px-4 border-b text-gray-700">{bid.product.productstatus}</td>
                                 </tr>
                             ))
                         ) : (

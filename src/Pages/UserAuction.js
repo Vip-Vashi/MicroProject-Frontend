@@ -46,7 +46,7 @@ const UserPage = () => {
             await axios.post('http://localhost:8000/bids', null, {
                 params: {
                     auctionId: auctionId,
-                    bidderId: sessionStorage.getItem(), // Replace with actual logged-in user ID
+                    bidderId: sessionStorage.getItem(), 
                     biddingPrice: bidAmount
                 }
             });

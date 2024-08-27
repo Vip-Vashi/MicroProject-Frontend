@@ -52,10 +52,10 @@ const LoginForm = () => {
           sessionStorage.setItem('userid', userData.uid);
           navigate('/HomePage');
         } else {
-          setError('Login failed: Invalid role');
+          setError('Login failed  !! Invalid user ');
         }
       } else {
-        setError('Login failed: Invalid email or password');
+        setError('Login failed !! Invalid email or password');
       }
     } catch (error) {
       setError('Login failed: Invalid email or password');

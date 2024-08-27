@@ -9,11 +9,11 @@ function Adminpage() {
   return (
     <>
      <AdminNav/>
-     
+   
     <Corosel/>
-    <div className="bg-gradient-to-r from-gray-800 to-gray-800 text-white py-16">
+    <div className="bg-gradient-to-b from-blue-50 to-gray-900 text-white py-16">
             <div className="container mx-auto text-center">
-                <h1 className="text-4xl font-bold">Admin Auction Dashboard</h1>
+                <h1 className="text-4xl font-bold">Welcome to Admin Auction Dashboard</h1>
                 <p className="mt-4 text-lg">Manage, monitor, and optimize your auctions with ease.</p>
                 <Link to="/Adminauction" className="mt-6 inline-block bg-blue-500 text-gray-100 py-2 px-4 rounded hover:bg-blue-900">
                     View Auctions

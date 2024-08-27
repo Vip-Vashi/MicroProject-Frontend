@@ -282,7 +282,7 @@
 // }
 
 // export default UserAuctionPage;
-
+//*********************************************FINAL VERSION****************************** */
 
 
 
@@ -299,6 +299,7 @@ import CreditCardModal from './CreditCardModal';
 import UPIModal from './UPIModal';
 import WalletModal from './WalletModal';
 import BidHistory from './Bidhistory';
+import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 
 function UserAuctionPage() {
@@ -323,7 +324,7 @@ function UserAuctionPage() {
       })
       .catch(error => console.error('Error fetching user:', error));
 
-    // Fetch winnings and retrieve payment status from sessionStorage
+   
     axios.get('http://localhost:8000/winners/all')
       .then(response => {
         const userWinnings = response.data.filter(winning => winning.product.user.uid == userId);
@@ -334,13 +335,22 @@ function UserAuctionPage() {
         setWinnings(updatedWinnings);
       })
       .catch(error => console.error('Error fetching winnings:', error));
+
+
+    
+
+
   }, []);
+
+
+
+  
 
   const handlePayment = (paymentDetails, winning) => {
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-      if (userProfile) {
+      if (userProfile && walletAmount>= paymentDetails.amount) {
         const newWalletAmount = walletAmount - parseFloat(paymentDetails.amount);
         const formData = new FormData();
         formData.append("WalletAmt", newWalletAmount);
@@ -355,10 +365,23 @@ function UserAuctionPage() {
             );
             setWinnings(updatedWinnings);
             sessionStorage.setItem(`paymentStatus_${winning.product.productId}`, true);
-            alert('Payment successful! Wallet has been updated.');
+
+            // alert('Payment successful! Wallet has been updated.');
+            Swal.fire({
+              title: 'Success ',
+              text: 'Payment Successfully Done !!',
+              icon: 'success',
+              confirmButtonText: 'OK'
+            });
           })
           .catch(error => console.error('Error updating user:', error));
       }
+      Swal.fire({
+        title: 'Failed ',
+        text: 'Payment Failed ..Insufficient Wallet Balance !!',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
       setSidebarOpen(false);
       setPaymentModal(null);
     }, 2000);
@@ -376,7 +399,13 @@ function UserAuctionPage() {
         axios.put(`http://localhost:8000/users/updatewallet/${userProfile.uid}`, formData)
           .then(response => {
             setWalletAmount(newWalletAmount);
-            alert('Payment to Wallet has been updated.');
+            // alert('Payment to Wallet has been updated.');
+            Swal.fire({
+              title: 'Success ',
+              text: 'Payment to Wallet has been updated !!',
+              icon: 'success',
+              confirmButtonText: 'OK'
+            });
           })
           .catch(error => console.error('Error updating user:', error));
       }
@@ -459,7 +488,7 @@ function UserAuctionPage() {
                     }}
                     disabled={winning.paid}
                   >
-                    <FaRupeeSign className="mr-2" /> {getButtonText(winning.paid)}
+                    {getButtonText(winning.paid)}
                   </button>
                 </td>
               </tr>
@@ -481,17 +510,37 @@ function UserAuctionPage() {
             <h3 className="text-gray-700 font-medium">Wallet Amount: ${walletAmount}</h3>
           </div>
           <div className="space-y-4">
-            <button className="w-full py-2 px-4 flex items-center justify-center bg-blue-600 text-white rounded hover:bg-blue-700" onClick={() => setPaymentModal('creditCard')}>
-              <FaCreditCard className="mr-2" /> Pay with Credit Card
+           
+            <button className="w-full py-2 px-4 flex items-center justify-center bg-green-600 text-white rounded hover:bg-green-700" onClick={() => setPaymentModal('upi')}>
+              <FaWallet className="mr-2" />Pay for Product from wallet
             </button>
-            <button className="w-full py-2 px-4 flex items-center justify-center bg-green-600 text-white rounded hover:bg-green-700" onClick={() => setPaymentModal('paypal')}>
-              <FaPaypal className="mr-2" /> Pay with PayPal
-            </button>
-            <button className="w-full py-2 px-4 flex items-center justify-center bg-yellow-600 text-white rounded hover:bg-yellow-700" onClick={() => setPaymentModal('googlePay')}>
+            {/* <button className="w-full py-2 px-4 flex items-center justify-center bg-yellow-600 text-white rounded hover:bg-yellow-700" onClick={() => setPaymentModal('upi')}>
               <FaGooglePay className="mr-2" /> Pay with Google Pay
+            </button> */}
+            <button className="w-full py-2 px-4 flex items-center justify-center bg-yellow-600 text-white rounded hover:bg-yellow-700" onClick={() => setPaymentModal('creditCard')}>
+              <FaCreditCard className="mr-2" /> Pay with  Card for Wallet
             </button>
             <button className="w-full py-2 px-4 flex items-center justify-center bg-gray-500 text-white rounded hover:bg-gray-600" onClick={() => setPaymentModal('wallet')}>
-              <FaGoogleWallet className="mr-2" /> Pay For  Wallet
+              <FaGoogleWallet className="mr-2" /> Pay with UPI For  Wallet
+            </button>
+          </div>
+          <div className="mt-6">
+            <button 
+
+              onClick={handlePayment}
+              disabled={loading}
+              
+              
+              className="w-full py-2 px-4 bg-indigo-600 text-white rounded hover:bg-indigo-700"
+            >
+              {loading ? (
+                <div className="flex items-center justify-center space-x-2">
+                  <div className="w-4 h-4 border-t-2 border-white border-solid rounded-full animate-spin"></div>
+                  <span>Processing...</span>
+                </div>
+              ) : (
+                 <span>close</span>
+              )}
             </button>
           </div>
         </div>
@@ -501,13 +550,18 @@ function UserAuctionPage() {
       <CreditCardModal
         show={paymentModal === 'creditCard'}
         handleClose={() => setPaymentModal(null)}
-        handlePayment={(details) => handlePayment(details, selectedWinning)}
+        walletPayment={walletPayment}
       />
       <UPIModal
-        show={paymentModal === 'paypal'}
+        show={paymentModal === 'upi'}
         handleClose={() => setPaymentModal(null)}
         handlePayment={(details) => handlePayment(details, selectedWinning)}
       />
+        {/* <UPIModal
+        show={paymentModal === 'googlePay'}
+        handleClose={() => setPaymentModal(null)}
+        handlePayment={(details) => handlePayment(details, selectedWinning)}
+      /> */}
       <WalletModal
         show={paymentModal === 'wallet'}
         handleClose={() => setPaymentModal(null)}

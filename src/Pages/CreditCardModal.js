@@ -10,15 +10,16 @@ const creditCardSchema = yup.object().shape({
   cardHolderName: yup.string().required('Card holder name is required'),
   expiryDate: yup.string().required('Expiry date is required').matches(/^\d{2}\/\d{2}$/, 'Expiry date must be in MM/YY format'),
   cvv: yup.string().required('CVV is required').matches(/^\d{3}$/, 'CVV must be 3 digits'),
+  amount:yup.number().required('Amount to pay is required').positive('Amount must be positive')
 });
 
-const CreditCardModal = ({ show, handleClose, handlePayment }) => {
+const CreditCardModal = ({ show, handleClose, walletPayment }) => {
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: yupResolver(creditCardSchema),
   });
 
   const onSubmit = data => {
-    handlePayment(data);
+    walletPayment(data);
   };
 
   return (
@@ -45,13 +46,13 @@ const CreditCardModal = ({ show, handleClose, handlePayment }) => {
           </Form.Group>
           <Form.Group controlId="formCvv">
             <Form.Label>CVV</Form.Label>
-            <Form.Control type="text" placeholder="Enter CVV" {...register('cvv')} isInvalid={!!errors.cvv} />
+            <Form.Control type="password" placeholder="Enter CVV" {...register('cvv')} isInvalid={!!errors.cvv} />
             <Form.Control.Feedback type="invalid">{errors.cvv?.message}</Form.Control.Feedback>
           </Form.Group>
-          <Form.Group controlId="formCardNumber">
+          <Form.Group controlId="formAmount">
             <Form.Label>Amount </Form.Label>
-            <Form.Control type="text" placeholder="Enter Amount" {...register('amount')} isInvalid={!!errors.cardNumber} />
-            <Form.Control.Feedback type="invalid">{errors.cardNumber?.message}</Form.Control.Feedback>
+            <Form.Control type="number" placeholder="Enter Amount" {...register('amount')} isInvalid={!!errors.amount} />
+            <Form.Control.Feedback type="invalid">{errors.amount?.message}</Form.Control.Feedback>
           </Form.Group>
           <Button variant="primary" type="submit">Pay</Button>
         </Form>

@@ -31,7 +31,7 @@ function Approuter() {
         
         <Routes>
           
-        <Route path="*" element={<Navigate to="/" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
           <Route path="/" element={<Home/>}></Route>
           <Route path="/login" element={<LoginForm/>}></Route>
           

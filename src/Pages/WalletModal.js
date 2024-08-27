@@ -8,6 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 const upiSchema = yup.object().shape({
   upiId: yup.string().required('UPI ID is required').email('UPI ID must be a valid email'),
   amount: yup.number().required('Amount is required').positive('Amount must be positive'),
+  password:yup.string().min(6, "Must be at least 6 characters").required('Password is must required')
 });
 
 const WalletModal = ({ show, handleClose, walletPayment }) => {
@@ -35,6 +36,11 @@ const WalletModal = ({ show, handleClose, walletPayment }) => {
             <Form.Label>Amount</Form.Label>
             <Form.Control type="number" placeholder="Enter amount" {...register('amount')} isInvalid={!!errors.amount} />
             <Form.Control.Feedback type="invalid">{errors.amount?.message}</Form.Control.Feedback>
+          </Form.Group>
+          <Form.Group controlId="formPassword">
+            <Form.Label>Password</Form.Label>
+            <Form.Control type="password" placeholder="Enter Password" {...register('password')} isInvalid={!!errors.password} />
+            <Form.Control.Feedback type="invalid">{errors.password?.message}</Form.Control.Feedback>
           </Form.Group>
           <Button variant="primary" type="submit">Pay</Button>
         </Form>
